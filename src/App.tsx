@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Button,
@@ -29,8 +29,29 @@ const App = () => {
   const [state, setstate] = useState<FormState>(initialFormState);
   const [terms, setterms] = useState<boolean>(false);
   const [isFormValid, setisFormValid] = useState<boolean | null>(null);
+  const [seconds, setseconds] = useState<number>(3);
+  const timerRef = useRef<number>();
 
   const { password, confirmPassword } = state;
+
+  useEffect(() => {
+    timerRef.current && clearInterval(timerRef.current);
+
+    if (isFormValid) {
+      timerRef.current = setInterval(() => {
+        setseconds((s) => {
+          if (s === 0) {
+            setstate(initialFormState);
+            setterms(false);
+            setisFormValid(null);
+            return 3;
+          }
+          
+          return s - 1;
+        });
+      }, 1000);
+    }
+  }, [isFormValid])
 
   const handleChangeTerms = () => {
     setterms(prevState => !prevState);
@@ -41,11 +62,20 @@ const App = () => {
 
     const values: { value: string, status: boolean | null, }[] = Object.values(state);
 
-    for (let i = 0; i < values.length; i++) {
-      if (!values[i].status) return;
-    }
+    if (terms) {
+      for (let i = 0; i < values.length; i++) {
+        const { status } = values[i];
 
-    setisFormValid(prevState => !prevState);
+        if (status === false || status === null) {
+          setisFormValid(false);
+          return;
+        };
+      }
+
+      setisFormValid(true);
+    } else {
+      alert('Please, accept terms and conditions.');
+    }
   }
 
 
@@ -164,9 +194,12 @@ const App = () => {
 
         <SendButtonContent>
           <Button type='submit'>Send</Button>
-          
+
           {isFormValid && terms && (
-            <SuccessfulMessage>Form sent successfully! </SuccessfulMessage>
+            <>
+              <SuccessfulMessage>Form sent successfully! </SuccessfulMessage>
+              <Label>Form will be reseted in {seconds}</Label>
+            </>
           )}
         </SendButtonContent>
 
