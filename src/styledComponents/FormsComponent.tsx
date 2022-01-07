@@ -10,19 +10,22 @@ type IsValidProps = {
 }
 
 const Form = styled.form`
+    background-color: white;
+    border-radius: 5px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;  
+    padding: 30px;
 
     ${media.custom(800)} {
-      grid-template-columns: 1fr;
+      display: block;
     }
 `;
 
 const Label = styled.label<IsValidProps>`
     display: block;
     font-weight: 700;
-    padding: 10px;
+    padding: 10px 5px;
     min-height: 40px;
     cursor: pointer;
 
@@ -44,7 +47,7 @@ const Input = styled.input<IsValidProps>`
     line-height: 45px;
     padding: 0 40px 0 10px;
     transition: .3s ease all;
-    border: 3px solid transparent;
+    border: 3px solid #0077b6;
 
     &:focus {
         border-color: ${colors.border};
@@ -100,22 +103,23 @@ const SendButtonContent = styled.div`
 const Button = styled.button`
     height: 45px;
     line-height: 45px;
-    width: 30%;
-    background-color: #000;
+    width: 40%;
+    background-color: #4a4e69;
     color: #fff;
     font-weight: bold;
     border:  none;
     border-radius: 3px;
     cursor: pointer;
-    transition: .1s ease all;
+    transition: .3s ease all;
 
     &:hover {
+        background-color: #22223b;
         box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4);
     }
 `;
 
 const SuccessfulMessage = styled.p`
-    font-size: 14px;
+    font-size: 16px;
     color: ${colors.successfull};
     /* display: none; */
 `;
